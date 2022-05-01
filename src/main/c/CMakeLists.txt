@@ -15,7 +15,7 @@ if (NOT MSYS)
 	endif()
 endif()
 
-target_link_libraries(fastestlapc LINK_PUBLIC lion::lion python ${LFASTESTLAPC_ADDITIONAL_FLAGS})
+target_link_libraries(fastestlapc LINK_PUBLIC lion::lion ${LFASTESTLAPC_ADDITIONAL_FLAGS})
 
 if ( NOT APPLE)
     target_link_options(fastestlapc PUBLIC -Wl,--no-as-needed -ldl)
