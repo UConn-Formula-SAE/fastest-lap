@@ -505,7 +505,7 @@ inline void Optimal_laptime<Dynamic_model_t>::compute_direct(const Dynamic_model
     // (8.5) Check optimality (disabled by default)
     if ( options.check_optimality )
     {
-        auto optimality_check = Check_optimality(fg, result.x, result.s, result.lambda, result.zl, result.zu, result.vl, result.vu, x_lb, x_ub, c_lb, c_ub, {});
+        auto optimality_check = Check_optimality<FG_direct<isClosed>>(fg, result.x, result.s, result.lambda, result.zl, result.zu, result.vl, result.vu, x_lb, x_ub, c_lb, c_ub, {});
     
         if ( !optimality_check.success ) 
         {
@@ -920,7 +920,7 @@ inline void Optimal_laptime<Dynamic_model_t>::compute_derivative(const Dynamic_m
     // (8.5) Check optimality (disabled by default)
     if ( options.check_optimality )
     {
-        auto optimality_check = Check_optimality(fg, result.x, result.s, result.lambda, result.zl, result.zu, result.vl, result.vu, x_lb, x_ub, c_lb, c_ub, {});
+        auto optimality_check = Check_optimality<FG_derivative<isClosed>>(fg, result.x, result.s, result.lambda, result.zl, result.zu, result.vl, result.vu, x_lb, x_ub, c_lb, c_ub, {});
     
         if ( !optimality_check.success ) 
         {
