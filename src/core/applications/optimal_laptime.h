@@ -21,6 +21,7 @@ class Optimal_laptime
         scalar sigma = 0.5;                 // 0: explicit euler, 0.5: crank-nicolson, 1.0: implicit euler
         size_t maximum_iterations = 3000;
         bool   throw_if_fail = true;
+        bool   check_optimality = false;
     };
 
     //! Helper classes to encapsulate control variables ---------------------------------------------:-

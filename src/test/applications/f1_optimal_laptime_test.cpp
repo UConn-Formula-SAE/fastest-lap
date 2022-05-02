@@ -5,6 +5,7 @@
 #include "lion/thirdparty/include/cppad/cppad.hpp"
 #include "src/core/applications/steady_state.h"
 #include "src/core/applications/circuit_preprocessor.h"
+#include "lion/math/check_optimality.h"
 
 extern bool is_valgrind;
 
@@ -54,8 +55,10 @@ TEST_F(F1_optimal_laptime_test, Catalunya_discrete)
 
     auto opts = Optimal_laptime<decltype(car)>::Options{};
     opts.print_level = 0;
+    opts.check_optimality = true;
     Optimal_laptime opt_laptime(s, true, true, car, {n,ss.q}, {n,ss.qa}, control_variables, opts);
     opt_laptime.xml();
+
 
     // Check the results with a saved simulation
     Xml_document opt_saved("data/f1_optimal_laptime_catalunya_discrete.xml", true);

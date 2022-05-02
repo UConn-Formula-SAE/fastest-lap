@@ -1,5 +1,6 @@
 #include "lion/thirdparty/include/cppad/ipopt/solve.hpp"
 #include "lion/math/ipopt_cppad_handler.hpp"
+#include "lion/math/check_optimality.h"
 
 template<typename Dynamic_model_t>
 inline Optimal_laptime<Dynamic_model_t>::Optimal_laptime(const std::vector<scalar>& s_, const bool is_closed_, const bool is_direct_,
@@ -501,6 +502,22 @@ inline void Optimal_laptime<Dynamic_model_t>::compute_direct(const Dynamic_model
         throw std::runtime_error("Optimization did not succeed");
     }
 
+    // (8.5) Check optimality (disabled by default)
+    if ( options.check_optimality )
+    {
+        auto optimality_check = Check_optimality(fg, result.x, result.s, result.lambda, result.zl, result.zu, result.vl, result.vu, x_lb, x_ub, c_lb, c_ub, {});
+    
+        if ( !optimality_check.success ) 
+        {
+            std::ostringstream s_out;
+            s_out << "[ERROR] Requested optimality check for optimal laptime problem has failed" << std::endl;
+            s_out << "        Big components of the gradient vector are:" << std::endl;
+            for (size_t i = 0; i < optimality_check.id_not_ok.size(); ++i)
+                s_out << "            " << optimality_check.id_not_ok[i] << ": " << optimality_check.grad_f[optimality_check.id_not_ok[i]] << std::endl;
+            throw std::runtime_error(s_out.str());
+        }
+    }
+
     // (9) Export the solution
 
     // (9.1) Load the latest solution vector to the fitness function object
@@ -898,6 +915,24 @@ inline void Optimal_laptime<Dynamic_model_t>::compute_derivative(const Dynamic_m
     if ( !success && options.throw_if_fail )
     {
         throw std::runtime_error("Optimization did not succeed");
+    }
+
+    // (8.5) Check optimality (disabled by default)
+    if ( options.check_optimality )
+    {
+        auto optimality_check = Check_optimality(fg, result.x, result.s, result.lambda, result.zl, result.zu, result.vl, result.vu, x_lb, x_ub, c_lb, c_ub, {});
+    
+        if ( !optimality_check.success ) 
+        {
+            std::ostringstream s_out;
+            s_out << "[ERROR] Requested optimality check for optimal laptime problem has failed" << std::endl;
+            s_out << "        Big components of the gradient vector are:" << std::endl;
+            for (size_t i = 0; i < optimality_check.id_not_ok.size(); ++i)
+                s_out << "            " << optimality_check.id_not_ok[i] << ": " << optimality_check.grad_f[optimality_check.id_not_ok[i]] << std::endl;
+            throw std::runtime_error(s_out.str());
+        }
+
+        out(2) << "[INFO] Optimal laptime -> requested optimality check has passed" << std::endl;
     }
 
     // (9) Export the solution
