@@ -6,7 +6,7 @@ import pathlib
 
 KMH=1.0/3.6;
 
-libname=str(pathlib.Path(__file__).parent.absolute()) + "/" + "${libdir_python}/$<TARGET_FILE_NAME:fastestlapc>"
+libname=str("libfastestlapc.so")
 c_lib = c.CDLL(libname)
 
 class c_Vehicle(c.Structure):
