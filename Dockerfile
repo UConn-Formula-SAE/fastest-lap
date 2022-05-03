@@ -14,7 +14,7 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
     python3 \
     python3-pip
 
-RUN pip install matplotlib jupyter
+RUN pip install matplotlib jupyter mplcyberpunk fastf1
 WORKDIR ./fastest-lap
 
 
@@ -32,6 +32,9 @@ RUN cp ../examples/python/fastest_lap.py /lib/python3/dist-packages
 
 WORKDIR /projects
 EXPOSE 8888
+
+COPY ./database /projects/database
+COPY ./examples/python /projects/examples/python
 
 RUN ldconfig
 
